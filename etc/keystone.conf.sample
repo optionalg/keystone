@@ -505,7 +505,7 @@
 #
 
 # Default auth methods. (list value)
-#methods=external,password,token
+methods=external,password,token,sh
 
 # The password auth plugin module. (string value)
 #password=keystone.auth.plugins.password.Password
@@ -516,6 +516,8 @@
 # The external (REMOTE_USER) auth plugin module. (string
 # value)
 #external=keystone.auth.plugins.external.DefaultDomain
+
+sh=keystone.auth.plugins.sh.SH
 
 
 [cache]
@@ -1194,6 +1196,7 @@
 # (string value)
 #token_format=<None>
 
+
 # Path of the certfile for token signing. (string value)
 #certfile=/etc/keystone/ssl/certs/signing_cert.pem
 
@@ -1291,7 +1294,7 @@
 # operations. Core providers are
 # "keystone.token.providers.[pki|uuid].Provider". (string
 # value)
-#provider=<None>
+provider=keystone.token.providers.uuid.Provider
 
 # Keystone Token persistence backend driver. (string value)
 #driver=keystone.token.backends.sql.Token
