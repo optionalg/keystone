@@ -328,7 +328,8 @@ class V3TokenDataHelper(object):
     def get_token_data(self, user_id, method_names, extras,
                        domain_id=None, project_id=None, expires=None,
                        trust=None, token=None, include_catalog=True,
-                       bind=None, access_token=None, issued_at=None):
+                       bind=None, access_token=None, issued_at=None,
+                       restrict_roles=None):
         token_data = {'methods': method_names,
                       'extras': extras}
 
@@ -349,6 +350,12 @@ class V3TokenDataHelper(object):
         self._populate_user(token_data, user_id, trust)
         self._populate_roles(token_data, user_id, domain_id, project_id, trust,
                              access_token)
+
+        if restrict_roles is not None:
+            token_roles = [role for role in token_data['roles']
+                if role['name'] in restrict_roles]
+            token_data['roles'] = token_roles
+
         if include_catalog:
             self._populate_service_catalog(token_data, user_id, domain_id,
                                            project_id, trust)
@@ -419,7 +426,8 @@ class BaseProvider(provider.Provider):
 
     def issue_v3_token(self, user_id, method_names, expires_at=None,
                        project_id=None, domain_id=None, auth_context=None,
-                       trust=None, metadata_ref=None, include_catalog=True):
+                       trust=None, metadata_ref=None, include_catalog=True,
+                       restrict_roles=None):
         # for V2, trust is stashed in metadata_ref
         if (CONF.trust.enabled and not trust and metadata_ref and
                 'trust_id' in metadata_ref):
@@ -449,7 +457,8 @@ class BaseProvider(provider.Provider):
             bind=auth_context.get('bind') if auth_context else None,
             token=token_ref,
             include_catalog=include_catalog,
-            access_token=access_token)
+            access_token=access_token,
+            restrict_roles=restrict_roles)
 
         token_id = self._get_token_id(token_data)
         try:

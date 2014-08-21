@@ -337,10 +337,12 @@ class Auth(controller.V3Controller):
             # NOTE(morganfainberg): define this here so it is clear what the
             # argument is during the issue_v3_token provider call.
             metadata_ref = None
+            restrict_roles = auth.get('restrict_roles')
 
             (token_id, token_data) = self.token_provider_api.issue_v3_token(
                 auth_context['user_id'], method_names, expires_at, project_id,
-                domain_id, auth_context, trust, metadata_ref, include_catalog)
+                domain_id, auth_context, trust, metadata_ref, include_catalog,
+                restrict_roles)
 
             return render_token_data_response(token_id, token_data,
                                               created=True)

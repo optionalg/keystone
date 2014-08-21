@@ -293,7 +293,8 @@ class Provider(object):
     @abc.abstractmethod
     def issue_v3_token(self, user_id, method_names, expires_at=None,
                        project_id=None, domain_id=None, auth_context=None,
-                       metadata_ref=None, include_catalog=True):
+                       metadata_ref=None, include_catalog=True,
+                       restrict_roles=None):
         """Issue a V3 Token.
 
         :param user_id: identity of the user
@@ -312,6 +313,8 @@ class Provider(object):
         :type metadata_ref: dict
         :param include_catalog: optional, include the catalog in token data
         :type include_catalog: boolean
+        :param restrict_roles: optional, only include roles from this list
+        :type include_catalog: list
         :returns: (token_id, token_data)
         """
         raise exception.NotImplemented()
